@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  zap:
+    image: owasp/zap2docker-stable
+    container_name: zap
+    ports:
+      - "8080:8080"
+    command: zap.sh -daemon -host 0.0.0.0 -port 8080
+    networks:
+      - telco_network
+
+  telcoinfo:
+    build: .
+    container_name: telcoinfo
+    depends_on:
+      - zap
+      - db
+    environment:
+      DATABASE_URL: "postgresql://telco_user:telco_password@db:5432/telco_db"
+    networks:
+      - telco_network
+
+  db:
+    image: postgres:15
+    container_name: telco_db
+    restart: always
+    environment:
+      POSTGRES_USER: telco_user
+      POSTGRES_PASSWORD: telco_password
+      POSTGRES_DB: telco_db
+    ports:
+      - "5432:5432"
+    networks:
+      - telco_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  telco_network:
+    driver: bridge  
+
+volumes:
+  postgres_data:
+    driver: local
