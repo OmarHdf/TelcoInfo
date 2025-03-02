@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-zaproxy:
+  zaproxy:
     image: ghcr.io/zaproxy/zaproxy:stable
     container_name: zaproxy
     ports:
@@ -10,8 +10,6 @@ zaproxy:
     volumes:
       - zap_data:/zap/wrk
 
-volumes:
-  zap_data:
   postgres:
     image: postgres:15
     container_name: postgres
@@ -39,5 +37,6 @@ volumes:
       - postgres
 
 volumes:
+  zap_data:
   postgres_data:
 
