@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+zaproxy:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    container_name: zaproxy
+    ports:
+      - "8090:8090"  # Port OWASP ZAP API
+    command: zap.sh -daemon -port 8090 -host 0.0.0.0
+    volumes:
+      - zap_data:/zap/wrk
+
+volumes:
+  zap_data:
   postgres:
     image: postgres:15
     container_name: postgres
