@@ -9,6 +9,8 @@ services:
     command: zap.sh -daemon -port 8090 -host 0.0.0.0
     volumes:
       - zap_data:/zap/wrk
+    networks:
+      - zap_network
 
   postgres:
     image: postgres:15
@@ -22,6 +24,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - zap_network
 
   sonarqube:
     image: sonarqube:latest
@@ -37,9 +41,11 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_data:/opt/sonarqube/data  
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_extensions:/opt/sonarqube/extensions
+    networks:
+      - zap_network
 
 volumes:
   zap_data:
@@ -47,4 +53,8 @@ volumes:
   sonarqube_data:
   sonarqube_logs:
   sonarqube_extensions:
+
+networks:
+  zap_network:
+    driver: bridge
 
