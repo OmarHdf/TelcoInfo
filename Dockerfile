@@ -1,21 +1,22 @@
 FROM nginx:alpine
 
-# Définir le répertoire de travail
+# Define working directory
 WORKDIR /usr/share/nginx/html
 
-# Copier tous les fichiers nécessaires
+# Copy the necessary files
 COPY index.html offres.html reclamation.html script.js styles.css /usr/share/nginx/html/
 
-# Mettre à jour et installer les dépendances
+# Update and install dependencies
 RUN apk update && apk upgrade && \
+    mkdir -p /var/cache/nginx/client_temp && \
     chown -R nginx:nginx /usr/share/nginx/html /var/cache/nginx
 
-# Changer d'utilisateur pour exécuter le conteneur en tant qu'utilisateur non privilégié
+# Change user to run the container as a non-root user
 USER nginx
 
-# Exposer le port 80
+# Expose port 80
 EXPOSE 80
 
-# Lancer nginx en mode non-démon
+# Start nginx in non-daemon mode
 CMD ["nginx", "-g", "daemon off;"]
 
