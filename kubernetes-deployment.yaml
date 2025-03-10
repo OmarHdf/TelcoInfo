@@ -1,14 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telcoinfo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: telcoinfo
+  template:
+    metadata:
+      labels:
+        app: telcoinfo
+    spec:
+      containers:
+        - name: telcoinfo
+          image: omarelhedfi/telcoinfo:latest
+          ports:
+            - containerPort: 8081
+
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: telco-service
 spec:
   selector:
-    app: telco-app
+    app: telcoinfo
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8081
-      nodePort: 30080  # Expose sur un port accessible
+      nodePort: 30080
   type: NodePort
 
