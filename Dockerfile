@@ -20,7 +20,7 @@ USER nginx
 EXPOSE 8081
 
 # Ajouter une instruction HEALTHCHECK pour vérifier la santé du conteneur
-HEALTHCHECK CMD curl --fail http://localhost:8081 || exit 1
+HEALTHCHECK CMD ["curl", "--fail", "http://localhost:8081"]
 
 # Démarrer nginx en mode non-démon
 CMD ["nginx", "-g", "daemon off;"]
